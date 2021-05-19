@@ -1,0 +1,16 @@
+version: "3"
+services:
+  nginx:
+    container_name: "filebrowser"
+    image: "filebrowser/filebrowser:latest"
+    ports:
+      - "8787:80"
+    volumes:
+      - "./srv:/srv"
+      - "./database.db:/database.db"
+      - "./filebrowser.json:/.filebrowser.json"
+    networks:
+      - "filebrowser-network"
+networks:
+  filebrowser-network:
+    driver: bridge
