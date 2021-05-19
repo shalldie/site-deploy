@@ -1,0 +1,16 @@
+version: "3"
+services:
+  nginx:
+    container_name: "nginx"
+    image: "shalldie/nginx:latest"
+    command: ["nginx"]
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "./:/etc/nginx/http.d"
+    networks:
+      - "nginx-network"
+networks:
+  nginx-network:
+    driver: bridge
