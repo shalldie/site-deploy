@@ -1,0 +1,20 @@
+version: "3"
+
+services:
+  traefik:
+    container_name: "traefik"
+    image: traefik:v2.4.8
+    ports:
+      - "80:80"
+      - "443:443"
+      # dashboard
+      - "8080:8080"
+    volumes:
+      # 用于监听 docker 生命周期
+      - /var/run/docker.sock:/var/run/docker.sock
+      # static/dynamic 配置文件、acme
+      - ./config:/etc/traefik
+networks:
+  default:
+    external: true
+    name: traefik-network

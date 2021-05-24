@@ -1,0 +1,45 @@
+# entrypoints，入口
+entryPoints:
+  # http, 80 端口
+  web:
+    address: :80
+    http:
+      # 会重定向到 https
+      # https://doc.traefik.io/traefik/routing/entrypoints/#redirection
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+  # https, 443 端口
+  websecure:
+    address: :443
+    http:
+      tls:
+        certResolver: nosaidResolver
+        domains:
+          - main: nosaid.com
+            sans:
+              - www.nosaid.com
+
+# https://doc.traefik.io/traefik/https/acme/#httpchallenge
+certificatesResolvers:
+  nosaidResolver:
+    acme:
+      email: hi.xieshuang@gmail.com
+      storage: /etc/traefik/acme.json
+      httpChallenge:
+        entryPoint: web
+
+providers:
+  # 监听动态配置
+  file:
+    directory: /etc/traefik/dynamic
+    watch: true
+  # 监听docker生命周期
+  docker:
+    network: traefik-network
+
+# 开启 dashboard
+# https://doc.traefik.io/traefik/operations/dashboard/#insecure-mode
+api:
+  insecure: true
